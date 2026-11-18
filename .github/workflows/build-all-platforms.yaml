@@ -1,0 +1,11 @@
+name: Build the code on all platforms (Linux, MacOS, Windows)
+on: [push]
+jobs:
+  Test-Building:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+
+      - name: Build the code
+        run: g++ main.cpp -std=c++17 -o main
