@@ -1,38 +1,40 @@
 name: Build the code on all platforms (Linux, MacOS, Windows)
-on: [push]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  Test-Building-Linux:
-    runs-on: ubuntu-latest
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            ldflags: ""
+          - os: macos-latest
+            ldflags: ""
+          - os: windows-latest
+            ldflags: -lws2_32
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-      - name: Build the code
-        run: g++ main.cpp -std=c++17 -o main
+      - name: Build
+        run: g++ -std=c++17 ${{ matrix.ldflags }} main.cpp -o main
 
-      - name: Run the app
+      - name: Run
         run: ./main
-
-  Test-Building-Mac:
-    runs-on: macos-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v6
-
-      - name: Build the code
-        run: g++ main.cpp -std=c++17 -o main
-
-      - name: Run the app
-        run: ./main
-
-  Test-Building-Windows:
-    runs-on: windows-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v6
-
-      - name: Build the code
-        run: g++ -std=c++17 main.cpp -o main -lws2_32
-
-      - name: Run the app
-        run: .\main
