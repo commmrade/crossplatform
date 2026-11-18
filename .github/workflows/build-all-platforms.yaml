@@ -1,7 +1,7 @@
 name: Build the code on all platforms (Linux, MacOS, Windows)
 on: [push]
 jobs:
-  Test-Building:
+  Test-Building-Linux:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -9,3 +9,21 @@ jobs:
 
       - name: Build the code
         run: g++ main.cpp -std=c++17 -o main
+
+  Test-Building-Mac:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+
+      - name: Build the code
+        run: g++ main.cpp -std=c++17 -o main
+
+  Test-Building-Windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+
+      - name: Build the code
+        run: g++ -std=c++17 main.cpp -o main -lws2_32
