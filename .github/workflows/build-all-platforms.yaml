@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Build
-        run: g++ -std=c++17 ${{ matrix.ldflags }} main.cpp -o main
+        run: g++ -std=c++17 main.cpp -o main ${{ matrix.ldflags }}
 
       - name: Run
         run: ./main
